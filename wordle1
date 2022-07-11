@@ -1,0 +1,98 @@
+from tkinter import *
+from tkinter import messagebox
+import wordss
+
+root = Tk()
+root.title("WORDLE")
+word = wordss.get_word()
+print(word)
+GREEN = "#007d21"
+YELLOW = "#e2e600"
+BLACK = "#000000"
+WHITE = "#FFFFFF"
+
+root.config(bg=BLACK)
+guessnum = 1
+wordip = Entry(root)
+wordip.grid(row=999, column=0, padx=10, pady=10, columnspan=3)
+
+
+def getguess():
+    global word
+    global guessnum
+    if guessnum < 6:
+        guessnum+=1
+        guess = wordip.get()
+        guess = guess.lower()
+
+        if len(guess) == 5:
+            if guess in wordss.outputwordslist:
+                if word == guess:
+                    for i, letter in enumerate(guess):
+                        label = Label(root, text=letter.upper())
+                        label.grid(row=guessnum, column=i, padx=10, pady=10)
+                        if letter == word[i]:
+                            label.config(bg=GREEN, fg=BLACK)
+                        if letter in word and not letter == word[i]:
+                            label.config(bg=YELLOW, fg=BLACK)
+                        if letter not in word:
+                            label.config(bg=BLACK, fg=WHITE)
+                    messagebox.showinfo("great job!", f"correct! The word was {word.title()}")
+                else:
+                    for i, letter in enumerate(guess):
+                        label = Label(root, text=letter.upper())
+                        label.grid(row=guessnum, column=i, padx=10, pady=10)
+                        if letter == word[i]:
+                            label.config(bg=GREEN, fg=BLACK)
+                        if letter in word and not letter == word[i]:
+                            label.config(bg=YELLOW, fg=BLACK)
+                        if letter not in word:
+                            label.config(bg=BLACK, fg=WHITE)
+            else:
+                guessnum-=1
+                messagebox.showerror("huh", "english please!")
+        else:
+            guessnum -= 1
+            messagebox.showerror("nope", "please use 5 characters")
+    elif(guessnum==6):
+        guessnum += 1
+        guess = wordip.get()
+        guess = guess.lower()
+        if len(guess) == 5:
+            if guess in wordss.outputwordslist:
+                wordip.config(state="disabled")
+                if word == guess:
+                    for i, letter in enumerate(guess):
+                        label = Label(root, text=letter.upper())
+                        label.grid(row=guessnum, column=i, padx=10, pady=10)
+                        if letter == word[i]:
+                            label.config(bg=GREEN, fg=BLACK)
+                        if letter in word and not letter == word[i]:
+                            label.config(bg=YELLOW, fg=BLACK)
+                        if letter not in word:
+                            label.config(bg=BLACK, fg=WHITE)
+                    messagebox.showinfo("great job!", f"correct! The word was {word.title()}")
+                else:
+                    for i, letter in enumerate(guess):
+                        label = Label(root, text=letter.upper())
+                        label.grid(row=guessnum, column=i, padx=10, pady=10)
+                        if letter == word[i]:
+                            label.config(bg=GREEN, fg=BLACK)
+                        if letter in word and not letter == word[i]:
+                            label.config(bg=YELLOW, fg=BLACK)
+                        if letter not in word:
+                            label.config(bg=BLACK, fg=WHITE)
+                    messagebox.showerror("bye bye bye!", f"The word was {word}")
+            else:
+                guessnum -= 1
+                messagebox.showerror("huh", "english please!")
+        else:
+            guessnum -= 1
+            messagebox.showerror("nope", "please use 5 characters")
+    else:
+        messagebox.showerror("bye bye bye!", f"The word was {word}")
+
+wordguessbutton = Button(root, text="Enter", command=getguess)
+wordguessbutton.grid(row=999, column=4, columnspan=2)
+
+root.mainloop()
